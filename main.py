@@ -41,19 +41,16 @@ class Hangman(Tk):
         l_palavra_dica = Label(f_palavra_dica,
                                text='Dica de palavara: ',
                                font=fonte,
-                               background=FUNDO
-                               )
+                               background=FUNDO)
         l_palavra_dica.pack()
 
         # Armazena a palavra e a dica
         self.palavra = le_arquivo_palavras_e_escolhe_a_palavra()
-        # self.palavra = ('ÉÍÓÚÁÃÂÊÔÇ', 'Música')
         # Exibe a dica
         self.l_dica = Label(f_palavra_dica,
                             text=f"{self.palavra[1]}",
                             font=fonte,
-                            background=FUNDO
-                            )
+                            background=FUNDO)
         self.l_dica.pack()
 
         # Cria o que vai esconder a palavra
@@ -62,8 +59,7 @@ class Hangman(Tk):
         self.l_palavra = Label(f_palavra_dica,
                                text=f'{" ".join(self.underscores)}',
                                font=fonte,
-                               background=FUNDO
-                               )
+                               background=FUNDO)
         self.l_palavra.pack()
 
         # ################################################################################################## #
@@ -73,7 +69,6 @@ class Hangman(Tk):
         f_imagem.pack()
 
         self.img = imagens()
-
         self.imagem_display = Label(f_imagem,
                                     image=self.img[0][1],
                                     width=440,
@@ -92,7 +87,6 @@ class Hangman(Tk):
 
         # Erros
         self.erros = 0
-    # Faz a criação dos botões
 
     # Cria os botões
     def cria_botoes(self):
@@ -139,10 +133,11 @@ class Hangman(Tk):
                         self.imagem_display['image'] = self.img[self.erros][1]
                     elif self.erros == 4:
                         self.imagem_display['image'] = self.img[self.erros][1]
-                    elif self.erros == 5:
+                    elif self.erros == 5:  # Total de erros 5
                         self.imagem_display['image'] = self.img[self.erros][1]
                         self.l_palavra.config(text=self.palavra[0])
                         self.l_palavra['fg'] = 'darkred'
+
                         if messagebox.askquestion("Game over", "Você não acertou a palavra, jogar novamente?") == "yes":
                             self.jogar_novamente()
                         else:
@@ -160,6 +155,7 @@ class Hangman(Tk):
             else:  # Se, não.
                 self.quit()  # Sai da aplicação
 
+    # Jogar novamente
     def jogar_novamente(self):
         self.palavra = le_arquivo_palavras_e_escolhe_a_palavra()
         self.underscores = define_underscores(self.palavra[0])
@@ -172,27 +168,26 @@ class Hangman(Tk):
         for btn in self.botoes:
             btn['state'] = NORMAL
 
+
 def imagens():
     lista_imagens = []
     for i, x in enumerate('hangman-img'):
         if i <= 5:
             lista_imagens.append((i, ImageTk.PhotoImage(Image.open(f'./hangman-img/hangman - stage {i + 1}.png'))))
-
     return lista_imagens
 
 
 def le_arquivo_palavras_e_escolhe_a_palavra():
     with open("Palavras.json", 'r') as arquivo:
         palavra = json.load(arquivo)
-        categoria = random.choice(list(palavra.keys()))
+        categoria = random.choice(list(palavra.keys()))  # Pega a dica
 
-        palavra_escolhida = random.choice(list(palavra.get(categoria)))
-        pal = unicodedata.normalize("NFD", palavra_escolhida.upper())
-        nova = re.sub(r'[\u0300-\u036f]', "", pal)
+        palavra_escolhida = random.choice(list(palavra.get(categoria)))  # Usa a dica e pega a lista com as palavras
+        pal = unicodedata.normalize("NFD", palavra_escolhida.upper())  # Remove caracteres especiais
+        nova = re.sub(r'[\u0300-\u036f]', "", pal)  # Devolve o caracter removido como uma letra normal
         return nova, categoria
 
 
 if __name__ == '__main__':
-    le_arquivo_palavras_e_escolhe_a_palavra()
     hangman = Hangman()
     hangman.mainloop()
