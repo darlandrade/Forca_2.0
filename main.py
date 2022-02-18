@@ -2,11 +2,11 @@ import json
 import random
 import re
 import unicodedata
+import string
+
 from tkinter import *
 from tkinter import messagebox
-
 from PIL import Image, ImageTk
-import string
 
 fonte = ('Comic Sans MS', 12)
 FUNDO = 'gray'
@@ -115,6 +115,7 @@ class Hangman(Tk):
 
                 # Se a letra estiver na palavra
                 if v_letra in palavra:
+                    self.botoes[i]['background'] = '#133F04'
                     # Itera pela palavra para encontra a posição e subistituir o 'underscore'
                     for j, l in enumerate(palavra):
                         # Valida a letra
@@ -123,6 +124,7 @@ class Hangman(Tk):
                     # Mostra a palavra juntando a palavra do 'underscores'
                     self.l_palavra.config(text=" ".join(self.underscores))
                 else:
+                    self.botoes[i]['background'] = '#4A0103'
                     # Faz a contagem dos erros e muda a imagem
                     self.erros += 1
                     if self.erros == 1:
@@ -165,8 +167,10 @@ class Hangman(Tk):
         self.erros = 0
         self.l_palavra['fg'] = 'black'
 
+        # Habilita os botões e retorna para cor normal
         for btn in self.botoes:
             btn['state'] = NORMAL
+            btn['background'] = FUNDOBOTAO
 
 
 def imagens():
